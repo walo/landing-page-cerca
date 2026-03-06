@@ -1,0 +1,572 @@
+<!-- Cerca Landing Page - Angular SSR -->
+<!-- ============ NAV ============ -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-md border-b border-gray-200 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+    <!-- Logo -->
+    <div class="flex items-center">
+      <img src="cerca-logo-full.png" alt="Cerca" class="h-10 w-auto block shrink-0" />
+    </div>
+    <!-- CTA Nav -->
+    <button id="nav-cta" (click)="scrollToForm()" class="hidden sm:flex items-center gap-2 bg-accent text-navy-900 font-semibold text-sm px-4 py-2 rounded-lg
+             hover:bg-primary-500 transition-all duration-200 hover:shadow-glow-lime">
+      Comenzar gratis
+    </button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section id="hero" class="relative min-h-screen bg-gradient-cerca flex items-center overflow-hidden pt-16">
+  <!-- Background decorations -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute -top-40 -right-40 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse-slow"></div>
+    <div
+      class="absolute -bottom-20 -left-20 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl animate-pulse-slow animation-delay-2000"></div>
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-navy-600/20 rounded-full blur-3xl">
+    </div>
+    <!-- Grid pattern -->
+    <div class="absolute inset-0 opacity-5 bg-grid-overlay"></div>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 grid lg:grid-cols-2 gap-12 items-center">
+    <!-- Left: Copy -->
+    <div class="animate-fade-in">
+      <div
+        class="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 text-accent text-sm font-medium px-4 py-2 rounded-full mb-6">
+        <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
+        30 días gratis · Sin tarjeta de crédito
+      </div>
+      <h1 class="font-heading font-black text-4xl sm:text-5xl lg:text-6xl text-white leading-tight mb-6">
+        Tu conjunto, <br>
+        <span class="text-lime-400">inteligente</span>
+        <br>
+        y conectado
+      </h1>
+      <p class="text-gray-300 text-lg lg:text-xl leading-relaxed mb-8 max-w-lg">
+        Digitaliza la administración de tu conjunto residencial. Gestiona cuotas,
+        residentes, PQRS, comunicados y más desde un solo lugar.
+      </p>
+      <!-- Benefits -->
+      <ul class="space-y-3 mb-10">
+        @for (benefit of heroBenefits; track benefit) {
+        <li class="flex items-center gap-3 text-gray-300">
+          <svg class="w-5 h-5 text-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+              clip-rule="evenodd" />
+          </svg>
+          <span>{{ benefit }}</span>
+        </li>
+        }
+      </ul>
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button id="hero-primary-cta" (click)="scrollToPricing()" class="flex items-center justify-center gap-2 bg-gradient-lime text-navy-900 font-bold text-lg px-8 py-4 rounded-xl
+                 hover:shadow-glow-lime hover:scale-105 transition-all duration-300">
+          Ver planes
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <button id="hero-secondary-cta" (click)="scrollToForm()" class="flex items-center justify-center gap-2 border border-white/20 text-white font-semibold text-lg px-8 py-4 rounded-xl
+                 hover:bg-white/10 hover:border-white/40 transition-all duration-300">
+          Registrarme ahora
+        </button>
+      </div>
+    </div>
+
+    <!-- Right: Dashboard mockup -->
+    <div class="hidden lg:flex justify-center animate-float">
+      <div class="relative w-full max-w-md">
+        <!-- Glow behind card -->
+        <div class="absolute inset-0 bg-accent/20 rounded-3xl blur-2xl transform scale-95"></div>
+        <!-- Main card -->
+        <div class="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 shadow-card">
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <p class="text-gray-400 text-sm">Conjunto Residencial</p>
+              <p class="text-white font-bold text-lg">Torres del Norte</p>
+            </div>
+            <img src="cerca-logo.png" alt="Cerca" class="w-10 h-10 rounded-xl object-contain" />
+          </div>
+          <!-- Stats grid -->
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            @for (stat of dashboardStats; track stat.label) {
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/5">
+              <p class="text-gray-400 text-xs mb-1">{{ stat.label }}</p>
+              <p class="text-white font-bold text-xl">{{ stat.value }}</p>
+              <p class="text-accent text-xs mt-1">{{ stat.change }}</p>
+            </div>
+            }
+          </div>
+          <!-- Recent activity -->
+          <div class="space-y-3">
+            <p class="text-gray-400 text-xs font-medium uppercase tracking-wider">Actividad reciente</p>
+            @for (activity of recentActivity; track activity.desc) {
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span class="text-base">{{ activity.icon }}</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-white text-sm truncate">{{ activity.desc }}</p>
+                <p class="text-gray-500 text-xs">{{ activity.time }}</p>
+              </div>
+              <span class="text-accent text-xs font-medium">{{ activity.badge }}</span>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+    <svg class="w-6 h-6 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section id="caracteristicas" class="bg-white py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="font-heading font-black text-3xl sm:text-4xl text-navy-600 mb-4">Todo lo que necesitas para administrar
+      </h2>
+      <p class="text-gray-500 text-lg max-w-2xl mx-auto">Una plataforma completa diseñada específicamente para la
+        gestión de propiedad horizontal en Colombia.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      @for (feature of features; track feature.title) {
+      <div
+        class="group p-6 rounded-2xl border border-gray-100 hover:border-accent/30 hover:shadow-card-hover transition-all duration-300 cursor-default">
+        <div
+          class="w-12 h-12 bg-navy-600/5 group-hover:bg-accent/10 rounded-2xl flex items-center justify-center mb-4 transition-colors duration-300">
+          <span class="text-2xl">{{ feature.icon }}</span>
+        </div>
+        <h3 class="font-heading font-bold text-navy-600 text-lg mb-2">{{ feature.title }}</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">{{ feature.description }}</p>
+      </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLANES / PRICING ============ -->
+<section id="planes" class="bg-gray-50 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="font-heading font-black text-3xl sm:text-4xl text-navy-600 mb-4">Planes simples y transparentes</h2>
+      <p class="text-gray-500 text-lg max-w-xl mx-auto">Sin contratos de permanencia. Cancela cuando quieras. Comienza
+        con 30 días gratis.</p>
+    </div>
+
+    @if (isLoadingPlans()) {
+    <div class="flex justify-center py-16">
+      <div class="flex flex-col items-center gap-4">
+        <div class="w-10 h-10 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-gray-400">Cargando planes...</p>
+      </div>
+    </div>
+    } @else {
+    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      @for (plan of plans(); track plan.id; let i = $index) {
+      <div [id]="'plan-' + plan.id"
+        class="relative group cursor-pointer rounded-3xl border-2 p-8 transition-all duration-300"
+        [class.border-accent]="selectedPlan()?.id === plan.id" [class.bg-navy-600]="selectedPlan()?.id === plan.id"
+        [class.border-gray-200]="selectedPlan()?.id !== plan.id" [class.bg-white]="selectedPlan()?.id !== plan.id"
+        [class.shadow-glow-lime]="selectedPlan()?.id === plan.id" [class.shadow-card]="selectedPlan()?.id !== plan.id"
+        (click)="selectPlan(plan)">
+        <!-- Popular badge -->
+        @if (i === 1) {
+        <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+          <span class="bg-gradient-lime text-navy-900 text-xs font-bold px-4 py-1.5 rounded-full shadow-glow-lime">
+            MÁS POPULAR
+          </span>
+        </div>
+        }
+        <!-- Selected indicator -->
+        @if (selectedPlan()?.id === plan.id) {
+        <div class="absolute top-4 right-4 w-6 h-6 bg-accent rounded-full flex items-center justify-center">
+          <svg class="w-3.5 h-3.5 text-navy-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        }
+        <!-- Plan header -->
+        <div class="mb-6">
+          <h3 class="font-heading font-bold text-xl mb-1" [class.text-white]="selectedPlan()?.id === plan.id"
+            [class.text-navy-600]="selectedPlan()?.id !== plan.id">
+            {{ plan.name }}
+          </h3>
+          <div class="flex items-baseline gap-1 mt-3">
+            <span class="font-heading font-black text-4xl" [class.text-accent]="selectedPlan()?.id === plan.id"
+              [class.text-navy-600]="selectedPlan()?.id !== plan.id">
+              {{ formatPrice(plan.price) }}
+            </span>
+            <span class="text-sm" [class.text-gray-400]="selectedPlan()?.id === plan.id"
+              [class.text-gray-500]="selectedPlan()?.id !== plan.id">
+              / {{ getBillingLabel(plan.billing_cycle) }}
+            </span>
+          </div>
+          <p class="text-sm mt-2" [class.text-accent]="selectedPlan()?.id === plan.id"
+            [class.text-green-600]="selectedPlan()?.id !== plan.id">
+            ✓ {{ plan.trial_days }} días gratis de prueba
+          </p>
+        </div>
+        <!-- Features -->
+        @if (plan.plan_features && plan.plan_features.length > 0) {
+        <ul class="space-y-3 mb-6">
+          @for (feature of plan.plan_features; track feature.id) {
+          <li class="flex items-start gap-2">
+            <svg class="w-4 h-4 mt-0.5 flex-shrink-0" [class.text-accent]="true" fill="currentColor" viewBox="0 0 20 20"
+              aria-hidden="true">
+              <path fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd" />
+            </svg>
+            <span class="text-sm" [class.text-gray-300]="selectedPlan()?.id === plan.id"
+              [class.text-gray-600]="selectedPlan()?.id !== plan.id">
+              {{ feature.description || feature.value }}
+            </span>
+          </li>
+          }
+        </ul>
+        } @else {
+        <ul class="space-y-3 mb-6">
+          @for (feat of getDefaultFeatures(plan); track feat) {
+          <li class="flex items-center gap-2">
+            <svg class="w-4 h-4 flex-shrink-0 text-accent" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd" />
+            </svg>
+            <span class="text-sm" [class.text-gray-300]="selectedPlan()?.id === plan.id"
+              [class.text-gray-600]="selectedPlan()?.id !== plan.id">
+              {{ feat }}
+            </span>
+          </li>
+          }
+        </ul>
+        }
+        <!-- CTA -->
+        <button [id]="'select-plan-' + plan.id" type="button"
+          class="w-full py-3 rounded-xl font-semibold transition-all duration-200"
+          [class.bg-accent]="selectedPlan()?.id !== plan.id" [class.text-navy-900]="selectedPlan()?.id !== plan.id"
+          [class.hover:bg-primary-500]="selectedPlan()?.id !== plan.id"
+          [class.bg-white]="selectedPlan()?.id === plan.id" [class.text-navy-600]="selectedPlan()?.id === plan.id"
+          [class.hover:bg-gray-100]="selectedPlan()?.id === plan.id">
+          @if (selectedPlan()?.id === plan.id) {
+          ✓ Plan seleccionado
+          } @else {
+          Seleccionar este plan
+          }
+        </button>
+      </div>
+      }
+    </div>
+    }
+  </div>
+</section>
+
+<!-- ============ REGISTRO FORM ============ -->
+<section id="registro-form" class="bg-white py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    @if (!isSuccess()) {
+    <div class="text-center mb-12">
+      <h2 class="font-heading font-black text-3xl sm:text-4xl text-navy-600 mb-4">
+        Registra tu conjunto
+      </h2>
+      <p class="text-gray-500 text-lg">Completa los datos para crear tu cuenta y comenzar la prueba gratuita.</p>
+      @if (selectedPlan()) {
+      <div
+        class="inline-flex items-center gap-2 bg-accent/10 border border-accent/30 text-navy-600 font-semibold text-sm px-4 py-2 rounded-full mt-4">
+        Plan seleccionado: {{ selectedPlan()!.name }} · {{ formatPrice(selectedPlan()!.price) }} /{{
+        getBillingLabel(selectedPlan()!.billing_cycle) }}
+      </div>
+      }
+    </div>
+
+
+    <!-- Registration Form -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" id="registration-form" novalidate
+      class="bg-white border border-gray-100 rounded-3xl p-8 shadow-card space-y-6">
+
+      <!-- Sección: Datos del Conjunto -->
+      <div>
+        <h3 class="font-heading font-bold text-navy-600 text-lg mb-4 flex items-center gap-2">
+          <span
+            class="w-7 h-7 bg-navy-600 text-white text-xs font-bold rounded-lg flex items-center justify-center">1</span>
+          Datos del conjunto residencial
+        </h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <!-- Nombre conjunto -->
+          <div class="sm:col-span-2">
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-1.5">
+              Nombre del conjunto <span class="text-red-500">*</span>
+            </label>
+            <input id="name" type="text" formControlName="name" placeholder="Ej: Conjunto Residencial El Prado"
+              class="w-full px-4 py-3 rounded-xl border transition-colors duration-200 focus:outline-none focus:ring-2 text-gray-900 placeholder-gray-400"
+              [class.border-red-300]="isFieldInvalid('name')" [class.focus:ring-red-200]="isFieldInvalid('name')"
+              [class.border-gray-200]="!isFieldInvalid('name')" [class.focus:ring-accent]="!isFieldInvalid('name')"
+              [class.focus:border-accent]="!isFieldInvalid('name')" />
+            @if (isFieldInvalid('name')) {
+            <p class="mt-1.5 text-xs text-red-500">{{ getFieldError('name') }}</p>
+            }
+            @if (form.get('name')?.pending) {
+            <p class="mt-1.5 text-xs text-gray-400 flex items-center gap-1">
+              <span
+                class="inline-block w-3 h-3 border border-gray-400 border-t-transparent rounded-full animate-spin"></span>
+              Verificando disponibilidad...
+            </p>
+            }
+          </div>
+          <!-- NIT -->
+          <div>
+            <label for="contact_nit" class="block text-sm font-medium text-gray-700 mb-1.5">
+              NIT del conjunto <span class="text-red-500">*</span>
+            </label>
+            <input id="contact_nit" type="text" formControlName="contact_nit" placeholder="Ej: 900123456-1"
+              class="w-full px-4 py-3 rounded-xl border transition-colors duration-200 focus:outline-none focus:ring-2 text-gray-900 placeholder-gray-400"
+              [class.border-red-300]="isFieldInvalid('contact_nit')"
+              [class.focus:ring-red-200]="isFieldInvalid('contact_nit')"
+              [class.border-gray-200]="!isFieldInvalid('contact_nit')"
+              [class.focus:ring-accent]="!isFieldInvalid('contact_nit')"
+              [class.focus:border-accent]="!isFieldInvalid('contact_nit')" />
+            @if (isFieldInvalid('contact_nit')) {
+            <p class="mt-1.5 text-xs text-red-500">{{ getFieldError('contact_nit') }}</p>
+            }
+            @if (form.get('contact_nit')?.pending) {
+            <p class="mt-1.5 text-xs text-gray-400 flex items-center gap-1">
+              <span
+                class="inline-block w-3 h-3 border border-gray-400 border-t-transparent rounded-full animate-spin"></span>
+              Verificando disponibilidad...
+            </p>
+            }
+          </div>
+          <!-- Ciudad -->
+          <div>
+            <label for="contact_city" class="block text-sm font-medium text-gray-700 mb-1.5">
+              Ciudad <span class="text-red-500">*</span>
+            </label>
+            <input id="contact_city" type="text" formControlName="contact_city" placeholder="Ej: Bogotá"
+              class="w-full px-4 py-3 rounded-xl border transition-colors duration-200 focus:outline-none focus:ring-2 text-gray-900 placeholder-gray-400"
+              [class.border-red-300]="isFieldInvalid('contact_city')"
+              [class.focus:ring-red-200]="isFieldInvalid('contact_city')"
+              [class.border-gray-200]="!isFieldInvalid('contact_city')"
+              [class.focus:ring-accent]="!isFieldInvalid('contact_city')"
+              [class.focus:border-accent]="!isFieldInvalid('contact_city')" />
+            @if (isFieldInvalid('contact_city')) {
+            <p class="mt-1.5 text-xs text-red-500">{{ getFieldError('contact_city') }}</p>
+            }
+          </div>
+          <!-- Dirección -->
+          <div class="sm:col-span-2">
+            <label for="contact_address" class="block text-sm font-medium text-gray-700 mb-1.5">
+              Dirección del conjunto <span class="text-red-500">*</span>
+            </label>
+            <input id="contact_address" type="text" formControlName="contact_address"
+              placeholder="Ej: Calle 50 # 20-30, Barrio El Prado"
+              class="w-full px-4 py-3 rounded-xl border transition-colors duration-200 focus:outline-none focus:ring-2 text-gray-900 placeholder-gray-400"
+              [class.border-red-300]="isFieldInvalid('contact_address')"
+              [class.focus:ring-red-200]="isFieldInvalid('contact_address')"
+              [class.border-gray-200]="!isFieldInvalid('contact_address')"
+              [class.focus:ring-accent]="!isFieldInvalid('contact_address')"
+              [class.focus:border-accent]="!isFieldInvalid('contact_address')" />
+            @if (isFieldInvalid('contact_address')) {
+            <p class="mt-1.5 text-xs text-red-500">{{ getFieldError('contact_address') }}</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-100"></div>
+
+      <!-- Sección: Datos del Administrador -->
+      <div>
+        <h3 class="font-heading font-bold text-navy-600 text-lg mb-4 flex items-center gap-2">
+          <span
+            class="w-7 h-7 bg-navy-600 text-white text-xs font-bold rounded-lg flex items-center justify-center">2</span>
+          Datos del administrador
+        </h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <!-- Nombre administrador -->
+          <div class="sm:col-span-2">
+            <label for="contact_name" class="block text-sm font-medium text-gray-700 mb-1.5">
+              Nombre completo <span class="text-red-500">*</span>
+            </label>
+            <input id="contact_name" type="text" formControlName="contact_name" placeholder="Ej: Carlos Rodríguez Pérez"
+              class="w-full px-4 py-3 rounded-xl border transition-colors duration-200 focus:outline-none focus:ring-2 text-gray-900 placeholder-gray-400"
+              [class.border-red-300]="isFieldInvalid('contact_name')"
+              [class.focus:ring-red-200]="isFieldInvalid('contact_name')"
+              [class.border-gray-200]="!isFieldInvalid('contact_name')"
+              [class.focus:ring-accent]="!isFieldInvalid('contact_name')"
+              [class.focus:border-accent]="!isFieldInvalid('contact_name')" />
+            @if (isFieldInvalid('contact_name')) {
+            <p class="mt-1.5 text-xs text-red-500">{{ getFieldError('contact_name') }}</p>
+            }
+          </div>
+          <!-- Email -->
+          <div>
+            <label for="contact_email" class="block text-sm font-medium text-gray-700 mb-1.5">
+              Correo electrónico <span class="text-red-500">*</span>
+            </label>
+            <input id="contact_email" type="email" formControlName="contact_email" placeholder="admin@conjunto.com"
+              autocomplete="email"
+              class="w-full px-4 py-3 rounded-xl border transition-colors duration-200 focus:outline-none focus:ring-2 text-gray-900 placeholder-gray-400"
+              [class.border-red-300]="isFieldInvalid('contact_email')"
+              [class.focus:ring-red-200]="isFieldInvalid('contact_email')"
+              [class.border-gray-200]="!isFieldInvalid('contact_email')"
+              [class.focus:ring-accent]="!isFieldInvalid('contact_email')"
+              [class.focus:border-accent]="!isFieldInvalid('contact_email')" />
+            @if (isFieldInvalid('contact_email')) {
+            <p class="mt-1.5 text-xs text-red-500">{{ getFieldError('contact_email') }}</p>
+            }
+            <p class="mt-1.5 text-xs text-gray-400">Recibirás las instrucciones de acceso en este correo</p>
+          </div>
+          <!-- Teléfono -->
+          <div>
+            <label for="contact_phone" class="block text-sm font-medium text-gray-700 mb-1.5">
+              Teléfono celular <span class="text-red-500">*</span>
+            </label>
+            <input id="contact_phone" type="tel" formControlName="contact_phone" placeholder="Ej: 3001234567"
+              autocomplete="tel"
+              class="w-full px-4 py-3 rounded-xl border transition-colors duration-200 focus:outline-none focus:ring-2 text-gray-900 placeholder-gray-400"
+              [class.border-red-300]="isFieldInvalid('contact_phone')"
+              [class.focus:ring-red-200]="isFieldInvalid('contact_phone')"
+              [class.border-gray-200]="!isFieldInvalid('contact_phone')"
+              [class.focus:ring-accent]="!isFieldInvalid('contact_phone')"
+              [class.focus:border-accent]="!isFieldInvalid('contact_phone')" />
+            @if (isFieldInvalid('contact_phone')) {
+            <p class="mt-1.5 text-xs text-red-500">{{ getFieldError('contact_phone') }}</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Legal & Submit -->
+      <div class="border-t border-gray-100 pt-6">
+        <p class="text-gray-400 text-xs mb-6 text-center leading-relaxed">
+          Al registrarte aceptas nuestros
+          <a href="#" class="text-navy-600 underline hover:text-accent transition-colors">Términos de servicio</a>
+          y
+          <a href="#" class="text-navy-600 underline hover:text-accent transition-colors">Política de privacidad</a>.
+          Tu información está protegida según la Ley 1581 de 2012.
+        </p>
+        <!-- Submit button -->
+        <button id="submit-registration" type="submit" [disabled]="isLoading()"
+          class="w-full flex items-center justify-center gap-3 bg-gradient-lime text-navy-900 font-bold text-lg py-4 rounded-xl
+                   hover:shadow-glow-lime hover:scale-[1.01] active:scale-[0.99] transition-all duration-300
+                   disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none">
+          @if (isLoading()) {
+          <div class="w-5 h-5 border-2 border-navy-900 border-t-transparent rounded-full animate-spin"></div>
+          Procesando...
+          } @else {
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          Comenzar prueba gratuita de {{ selectedPlan()?.trial_days ?? 30 }} días
+          }
+        </button>
+      </div>
+    </form>
+    }
+
+    <!-- ============ SUCCESS ============ -->
+    @if (isSuccess()) {
+    <div class="text-center animate-slide-up">
+      <div
+        class="w-24 h-24 bg-gradient-lime rounded-full flex items-center justify-center mx-auto mb-8 shadow-glow-lime">
+        <svg class="w-12 h-12 text-navy-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h2 class="font-heading font-black text-3xl sm:text-4xl text-navy-600 mb-4">
+        ¡Registro exitoso!
+      </h2>
+      <p class="text-gray-500 text-lg mb-6 max-w-md mx-auto">
+        Tu conjunto está listo en Cerca. Hemos enviado las instrucciones de acceso a
+        <strong class="text-navy-600">{{ form.get('contact_email')?.value }}</strong>
+      </p>
+      @if (registrationResult()) {
+      <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 max-w-sm mx-auto mb-8 text-left space-y-3">
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-500">Plan activado</span>
+          <span class="font-semibold text-navy-600">{{ registrationResult()?.planName }}</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-500">Prueba gratuita hasta</span>
+          <span class="font-semibold text-navy-600">{{ registrationResult()?.trialEndDate | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+      }
+      <!-- Steps -->
+      <div class="text-left max-w-sm mx-auto space-y-4 mb-10">
+        <h3 class="font-heading font-bold text-navy-600 text-center mb-4">Próximos pasos</h3>
+        @for (step of onboardingSteps; track step.text; let i = $index) {
+        <div class="flex items-start gap-3">
+          <div
+            class="w-8 h-8 bg-navy-600 text-white text-xs font-bold rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+            {{ i + 1 }}
+          </div>
+          <p class="text-gray-600 text-sm pt-1">{{ step.text }}</p>
+        </div>
+        }
+      </div>
+      <p class="text-gray-400 text-sm">
+        ¿Necesitas ayuda?
+        <a href="mailto:soporte@cerca.com.co"
+          class="text-accent hover:text-primary-500 font-medium transition-colors">soporte&#64;cerca.com.co</a>
+      </p>
+    </div>
+    }
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-white border-t border-gray-200 text-gray-500 py-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center">
+        <img src="cerca-logo-full.png" alt="Cerca" class="h-8 w-auto block shrink-0" />
+      </div>
+      <div class="flex gap-6 text-sm">
+        <a href="#" class="hover:text-accent transition-colors">Términos</a>
+        <a href="#" class="hover:text-accent transition-colors">Privacidad</a>
+        <a href="mailto:soporte@cerca.com.co" class="hover:text-accent transition-colors">Soporte</a>
+      </div>
+      <p class="text-xs text-gray-600">© 2026 Cerca. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ TOAST NOTIFICATIONS ============ -->
+@if (isError()) {
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] w-full max-w-md animate-slide-up-toast">
+  <div class="border border-red-200 rounded-2xl shadow-2xl px-5 py-4 flex items-start gap-4 bg-white">
+    <!-- Icon -->
+    <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+      <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <!-- Content -->
+    <div class="flex-1 min-w-0">
+      <p class="font-semibold text-gray-900 text-sm">Error al procesar tu solicitud</p>
+      <p class="text-red-600 text-sm mt-0.5">{{ errorMessage() }}</p>
+    </div>
+    <!-- Close -->
+    <button (click)="clearError()" class="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0 ml-2 mt-0.5"
+      aria-label="Cerrar">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+</div>
+}

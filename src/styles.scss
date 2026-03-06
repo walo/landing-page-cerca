@@ -1,0 +1,204 @@
+@use "tailwindcss";
+/* Cerca Landing Page - Global Styles - Tailwind CSS v4 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@700;800;900&display=swap');
+
+/* Cerca custom theme - Tailwind v4 CSS-based config */
+@theme {
+    /* Brand colors */
+    --color-primary-50: #f0fdf4;
+    --color-primary-100: #dcfce7;
+    --color-primary-200: #bbf7d0;
+    --color-primary-300: #86efac;
+    --color-primary-400: #4ade80;
+    --color-primary-500: #22c55e;
+    --color-primary-600: #16a34a;
+    --color-accent: #a3e635;
+
+    --color-navy-50: #f0f4ff;
+    --color-navy-100: #e0e9ff;
+    --color-navy-200: #c7d7fe;
+    --color-navy-300: #a5b4fc;
+    --color-navy-400: #818cf8;
+    --color-navy-500: #6366f1;
+    --color-navy-600: #1e2d5a;
+    --color-navy-700: #1a2549;
+    --color-navy-800: #111827;
+    --color-navy-900: #0d1117;
+
+    /* Fonts */
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-heading: 'Outfit', 'Inter', system-ui, sans-serif;
+
+    /* Animations */
+    --animate-fade-in: fadeIn 0.6s ease-in-out;
+    --animate-slide-up: slideUp 0.5s ease-out;
+    --animate-float: float 6s ease-in-out infinite;
+
+    /* Keyframes */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+}
+
+/* Critical base styles for SSR */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-navy-900);
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+
+/* Toast notification animation */
+@keyframes slideUpToast {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Gradient utilities */
+.bg-gradient-cerca {
+    background: linear-gradient(135deg, #1e2d5a 0%, #1a2549 50%, #0d1117 100%);
+}
+
+.bg-gradient-lime {
+    background: linear-gradient(135deg, #a3e635 0%, #22c55e 100%);
+}
+
+.shadow-glow-lime {
+    box-shadow: 0 0 30px rgba(163, 230, 53, 0.3);
+}
+
+.shadow-card {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.shadow-card-hover {
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25);
+}
+
+.text-accent {
+    color: #a3e635;
+}
+
+.bg-accent {
+    background-color: #a3e635;
+}
+
+.border-accent {
+    border-color: #a3e635;
+}
+
+.focus\:ring-accent:focus {
+    --tw-ring-color: #a3e635;
+}
+
+.focus\:border-accent:focus {
+    border-color: #a3e635;
+}
+
+.hover\:bg-accent:hover {
+    background-color: #a3e635;
+}
+
+/* Navy colors */
+.bg-navy-600 {
+    background-color: #1e2d5a;
+}
+
+.bg-navy-700 {
+    background-color: #1a2549;
+}
+
+.bg-navy-800 {
+    background-color: #111827;
+}
+
+.bg-navy-900 {
+    background-color: #0d1117;
+}
+
+.text-navy-600 {
+    color: #1e2d5a;
+}
+
+.text-navy-900 {
+    color: #0d1117;
+}
+
+.border-navy-600 {
+    border-color: #1e2d5a;
+}
+
+/* Accent/hover helpers */
+.hover\:bg-primary-500:hover {
+    background-color: #22c55e;
+}
+
+/* Heading font */
+.font-heading {
+    font-family: var(--font-heading);
+}
+
+/* Animation classes */
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
