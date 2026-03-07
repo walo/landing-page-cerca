@@ -279,7 +279,11 @@
     @if (!isSuccess()) {
     <div class="text-center mb-12">
       <h2 class="font-heading font-black text-3xl sm:text-4xl text-navy-600 mb-4">
+        @if (isEnterprise()) {
+        Registra tu empresa administradora
+        } @else {
         Registra tu conjunto
+        }
       </h2>
       <p class="text-gray-500 text-lg">Completa los datos para crear tu cuenta y comenzar la prueba gratuita.</p>
       @if (selectedPlan()) {
@@ -301,15 +305,24 @@
         <h3 class="font-heading font-bold text-navy-600 text-lg mb-4 flex items-center gap-2">
           <span
             class="w-7 h-7 bg-navy-600 text-white text-xs font-bold rounded-lg flex items-center justify-center">1</span>
+          @if (isEnterprise()) {
+          Datos de la empresa administradora
+          } @else {
           Datos del conjunto residencial
+          }
         </h3>
         <div class="grid sm:grid-cols-2 gap-4">
           <!-- Nombre conjunto -->
           <div class="sm:col-span-2">
             <label for="name" class="block text-sm font-medium text-gray-700 mb-1.5">
+              @if (isEnterprise()) {
+              Nombre de la empresa <span class="text-red-500">*</span>
+              } @else {
               Nombre del conjunto <span class="text-red-500">*</span>
+              }
             </label>
-            <input id="name" type="text" formControlName="name" placeholder="Ej: Conjunto Residencial El Prado"
+            <input id="name" type="text" formControlName="name"
+              [placeholder]="isEnterprise() ? 'Ej: Administración Torres del Norte S.A.S.' : 'Ej: Conjunto Residencial El Prado'"
               class="w-full px-4 py-3 rounded-xl border transition-colors duration-200 focus:outline-none focus:ring-2 text-gray-900 placeholder-gray-400"
               [class.border-red-300]="isFieldInvalid('name')" [class.focus:ring-red-200]="isFieldInvalid('name')"
               [class.border-gray-200]="!isFieldInvalid('name')" [class.focus:ring-accent]="!isFieldInvalid('name')"
@@ -328,7 +341,11 @@
           <!-- NIT -->
           <div>
             <label for="contact_nit" class="block text-sm font-medium text-gray-700 mb-1.5">
+              @if (isEnterprise()) {
+              NIT de la empresa <span class="text-red-500">*</span>
+              } @else {
               NIT del conjunto <span class="text-red-500">*</span>
+              }
             </label>
             <input id="contact_nit" type="text" formControlName="contact_nit" placeholder="Ej: 900123456-1"
               class="w-full px-4 py-3 rounded-xl border transition-colors duration-200 focus:outline-none focus:ring-2 text-gray-900 placeholder-gray-400"
@@ -367,7 +384,11 @@
           <!-- Dirección -->
           <div class="sm:col-span-2">
             <label for="contact_address" class="block text-sm font-medium text-gray-700 mb-1.5">
+              @if (isEnterprise()) {
+              Dirección de la empresa <span class="text-red-500">*</span>
+              } @else {
               Dirección del conjunto <span class="text-red-500">*</span>
+              }
             </label>
             <input id="contact_address" type="text" formControlName="contact_address"
               placeholder="Ej: Calle 50 # 20-30, Barrio El Prado"
@@ -391,7 +412,11 @@
         <h3 class="font-heading font-bold text-navy-600 text-lg mb-4 flex items-center gap-2">
           <span
             class="w-7 h-7 bg-navy-600 text-white text-xs font-bold rounded-lg flex items-center justify-center">2</span>
+          @if (isEnterprise()) {
+          Datos del administrador de la empresa
+          } @else {
           Datos del administrador
+          }
         </h3>
         <div class="grid sm:grid-cols-2 gap-4">
           <!-- Nombre administrador -->
@@ -486,11 +511,21 @@
         </svg>
       </div>
       <h2 class="font-heading font-black text-3xl sm:text-4xl text-navy-600 mb-4">
+        @if (isEnterprise()) {
+        ¡Registro exitoso de tu empresa!
+        } @else {
         ¡Registro exitoso!
+        }
       </h2>
       <p class="text-gray-500 text-lg mb-6 max-w-md mx-auto">
+        @if (isEnterprise()) {
+        Tu empresa fue registrada en Cerca Enterprise. Hemos enviado las instrucciones para crear tu contraseña e ingresar a
+        <strong class="text-navy-600">saas-admin</strong> usando
+        <strong class="text-navy-600">{{ form.get('contact_email')?.value }}</strong>.
+        } @else {
         Tu conjunto está listo en Cerca. Hemos enviado las instrucciones de acceso a
         <strong class="text-navy-600">{{ form.get('contact_email')?.value }}</strong>
+        }
       </p>
       @if (registrationResult()) {
       <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 max-w-sm mx-auto mb-8 text-left space-y-3">
@@ -507,7 +542,7 @@
       <!-- Steps -->
       <div class="text-left max-w-sm mx-auto space-y-4 mb-10">
         <h3 class="font-heading font-bold text-navy-600 text-center mb-4">Próximos pasos</h3>
-        @for (step of onboardingSteps; track step.text; let i = $index) {
+        @for (step of currentOnboardingSteps(); track step.text; let i = $index) {
         <div class="flex items-start gap-3">
           <div
             class="w-8 h-8 bg-navy-600 text-white text-xs font-bold rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
