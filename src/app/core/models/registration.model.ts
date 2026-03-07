@@ -4,6 +4,10 @@
  */
 import { z } from 'zod';
 
+/** Tipos de cliente soportados por el backend de suscripciones */
+export const ClientTypeSchema = z.enum(['SINGLE_CONJUNTO', 'ADMIN_COMPANY']);
+export type ClientType = z.infer<typeof ClientTypeSchema>;
+
 /** Plan disponible en el sistema de suscripciones */
 export interface Plan {
     id: string;
@@ -15,6 +19,12 @@ export interface Plan {
     billing_cycle_label?: string;
     trial_days: number;
     is_active: boolean;
+    /**
+     * true = plan Enterprise (empresa administradora de varios conjuntos).
+     * false = plan Pro (persona administradora de un conjunto).
+     * Usado por la Edge Function para definir el flujo de registro.
+     */
+    is_enterprise?: boolean;
     features?: PlanFeature[];
     plan_features?: PlanFeature[];
 }
@@ -28,13 +38,15 @@ export interface PlanFeature {
 
 /** DTO enviado a la Edge Function register-client */
 export const RegistrationDtoSchema = z.object({
+    client_type: ClientTypeSchema,
+    is_enterprise: z.boolean().optional(),
     name: z.string().min(3),
     contact_name: z.string().min(3),
-    contact_nit: z.string().min(6),
+    tax_id: z.string().min(6),
     contact_email: z.string().email(),
     contact_phone: z.string().min(10),
-    contact_address: z.string().min(3),
-    contact_city: z.string().min(2),
+    billing_address: z.string().min(3),
+    billing_city: z.string().min(2),
     plan_id: z.string().min(1),
 });
 

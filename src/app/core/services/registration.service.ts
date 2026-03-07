@@ -43,6 +43,7 @@ export class RegistrationService {
           billing_cycle,
           trial_days,
           is_active,
+          is_enterprise,
           plan_features (
             id,
             value,
@@ -80,30 +81,32 @@ export class RegistrationService {
     }
 
     /**
-     * Verifica si ya existe un conjunto con el mismo NIT.
+     * Verifica si ya existe un cliente con el mismo NIT.
+     * Usa la tabla clients (tax_id) del proyecto Suscripciones.
      */
     checkNitExists(nit: string): Observable<boolean> {
         if (!this.isBrowser || !nit) return of(false);
         return from(
             this.supabase
-                .from('tenants')
+                .from('clients')
                 .select('id', { count: 'exact', head: true })
-                .eq('contact_nit', nit.trim())
-                .then(({ count }) => (count ?? 0) > 0)
+                .eq('tax_id', nit.trim())
+                .then(({ count }) => (count ?? 0) > 0, () => false)
         );
     }
 
     /**
-     * Verifica si ya existe un conjunto con el mismo nombre.
+     * Verifica si ya existe un cliente con el mismo nombre.
+     * Usa la tabla clients del proyecto Suscripciones.
      */
     checkNameExists(name: string): Observable<boolean> {
         if (!this.isBrowser || !name) return of(false);
         return from(
             this.supabase
-                .from('tenants')
+                .from('clients')
                 .select('id', { count: 'exact', head: true })
                 .ilike('name', name.trim())
-                .then(({ count }) => (count ?? 0) > 0)
+                .then(({ count }) => (count ?? 0) > 0, () => false)
         );
     }
 
