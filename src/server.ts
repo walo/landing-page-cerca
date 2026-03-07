@@ -26,8 +26,31 @@ const SUPABASE_ANON_KEY =
   process.env['SUPABASE_ANON_KEY'] ??
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlcnZ5aHpueXVucHl1bmV2bXpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODcyMTUsImV4cCI6MjA3Nzg2MzIxNX0.J4AQWiUBCQCU8g-XYSWvTo2nGsKPGAD8o75ia-dsgSc';
 
+/**
+ * Mapea el payload del formulario (nombres de la landing) al esquema de la tabla
+ * public.clients del proyecto Suscripciones (billing_address, billing_city, tax_id).
+ * Ver docs/flujo-registro-landing-conjunto.md y columnas de clients.
+ */
+function mapRegistrationBodyToClientSchema(body: Record<string, unknown>): Record<string, unknown> {
+  const mapped: Record<string, unknown> = { ...body };
+
+  // Alias hacia el esquema de clients (sin romper Edge Functions que esperan contact_*)
+  if (body['contact_address'] !== undefined) {
+    mapped['billing_address'] = body['contact_address'];
+  }
+  if (body['contact_city'] !== undefined) {
+    mapped['billing_city'] = body['contact_city'];
+  }
+  if (body['contact_nit'] !== undefined) {
+    mapped['tax_id'] = body['contact_nit'];
+  }
+
+  return mapped;
+}
+
 app.post('/api/registro-conjunto', async (req, res) => {
   try {
+    const body = mapRegistrationBodyToClientSchema(req.body as Record<string, unknown>);
     const response = await fetch(
       `${SUPABASE_URL}/functions/v1/register-client`,
       {
@@ -36,7 +59,7 @@ app.post('/api/registro-conjunto', async (req, res) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
         },
-        body: JSON.stringify(req.body),
+        body: JSON.stringify(body),
       },
     );
 

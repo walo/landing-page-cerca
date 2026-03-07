@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, AsyncValidatorFn } from '@angular/forms';
 import { Meta, Title } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { debounceTime, switchMap, map, first } from 'rxjs/operators';
 import { RegistrationService } from './core/services/registration.service';
 import {
+  ClientType,
   Plan,
   RegistrationDto,
   RegistrationDtoSchema,
@@ -39,6 +40,13 @@ export class App implements OnInit {
   readonly isLoading = computed(() => this.step() === 'loading');
   readonly isSuccess = computed(() => this.step() === 'success');
   readonly isError = computed(() => this.step() === 'error');
+  readonly clientType = computed<ClientType>(() => {
+    const plan = this.selectedPlan();
+    if (!plan) return 'SINGLE_CONJUNTO';
+    return this.getClientTypeForPlan(plan);
+  });
+  readonly isEnterprise = computed(() => this.clientType() === 'ADMIN_COMPANY');
+  readonly isSingleConjunto = computed(() => this.clientType() === 'SINGLE_CONJUNTO');
 
   // Reactive Form
   readonly form = this.fb.group({
@@ -132,6 +140,16 @@ export class App implements OnInit {
     { text: 'Empieza a gestionar cuotas, comunicados y residentes. ¡Tienes 15 días completamente gratis!' },
   ];
 
+  readonly onboardingStepsEnterprise = [
+    { text: 'Revisa tu correo y abre el enlace para crear tu contraseña de acceso a saas-admin.' },
+    { text: 'Ingresa a saas-admin con tus credenciales y configura el perfil de tu empresa administradora.' },
+    { text: 'Crea tus primeros conjuntos, asigna administradores de conjunto y personaliza tu marca (subdominio, logo, colores).' },
+  ];
+
+  readonly currentOnboardingSteps = computed(() =>
+    this.isEnterprise() ? this.onboardingStepsEnterprise : this.onboardingSteps,
+  );
+
   ngOnInit(): void {
     // SEO Meta tags
     this.title.setTitle('Cerca | Gestión Inteligente para tu Conjunto Residencial');
@@ -205,6 +223,18 @@ export class App implements OnInit {
     ];
   }
 
+  /**
+   * Deriva el tipo de cliente a partir del plan.
+   * Usa is_enterprise cuando esté disponible; respaldo por name/code.
+   */
+  private getClientTypeForPlan(plan: Plan): ClientType {
+    if (plan.is_enterprise === true) return 'ADMIN_COMPANY';
+    const name = plan.name?.toLowerCase() ?? '';
+    const code = plan.code?.toLowerCase() ?? '';
+    if (name.includes('enterprise') || code.includes('enterprise')) return 'ADMIN_COMPANY';
+    return 'SINGLE_CONJUNTO';
+  }
+
   isFieldInvalid(field: string): boolean {
     const control = this.form.get(field) as AbstractControl;
     return control?.invalid && (control?.dirty || control?.touched);
@@ -241,13 +271,15 @@ export class App implements OnInit {
 
     const formValue = this.form.getRawValue();
     const dto: RegistrationDto = {
+      client_type: this.clientType(),
+      is_enterprise: this.selectedPlan()?.is_enterprise ?? false,
       name: formValue.name ?? '',
       contact_name: formValue.contact_name ?? '',
-      contact_nit: formValue.contact_nit ?? '',
+      tax_id: formValue.contact_nit ?? '',
       contact_email: formValue.contact_email ?? '',
       contact_phone: formValue.contact_phone ?? '',
-      contact_address: formValue.contact_address ?? '',
-      contact_city: formValue.contact_city ?? '',
+      billing_address: formValue.contact_address ?? '',
+      billing_city: formValue.contact_city ?? '',
       plan_id: plan.id,
     };
 
